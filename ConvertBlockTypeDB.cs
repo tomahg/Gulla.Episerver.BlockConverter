@@ -36,22 +36,22 @@ namespace Alloy.Business.ConvertBlocks
             _propertyDefinitionRepository = propertyDefinitionRepository;
         }
 
-        /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice. Convert a page to a new page type
+        /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice. Convert a block to a new block type
         /// This member supports the EPiServer infrastructure and is not intended to be used directly from your code.
         /// </summary>
-        /// <param name="pageLinkId">The id to the page which will be converted</param>
-        /// <param name="fromPageTypeId">The id of the page type to convert from</param>
-        /// <param name="toPageTypeId">To id of the page type to convert to</param>
+        /// <param name="blockLinkId">The id to the block which will be converted</param>
+        /// <param name="fromBlockTypeId">The id of the block type to convert from</param>
+        /// <param name="toBlockTypeId">To id of the block type to convert to</param>
         /// <param name="propertyTypeMap">"from"-"to" mappings of properties
         /// , the mapped properties has to be on the same base form</param>
-        /// <param name="recursive">if set to <c>true</c> the conversion will be performed for all subpages also</param>
+        /// <param name="recursive">if set to <c>true</c> the conversion will be performed for all child blocks also</param>
         /// <param name="isTest">if set to <c>true</c> no actual conversion is made but a test to see the effect of the conversion</param>
         /// <returns>A dataset with information of changes</returns>
         /// <exclude />
         public virtual DataSet Convert(
-          int pageLinkId,
-          int fromPageTypeId,
-          int toPageTypeId,
+          int blockLinkId,
+          int fromBlockTypeId,
+          int toBlockTypeId,
           List<KeyValuePair<int, int>> propertyTypeMap,
           bool recursive,
           bool isTest)
@@ -60,15 +60,15 @@ namespace Alloy.Business.ConvertBlocks
             {
                 Locale = CultureInfo.InvariantCulture,
                 Tables = {
-                    ConvertPageTypeProperties(pageLinkId, fromPageTypeId, propertyTypeMap, recursive, isTest),
-                    ConvertPageType(pageLinkId, fromPageTypeId, toPageTypeId, recursive, isTest)
+                    ConvertPageTypeProperties(blockLinkId, fromBlockTypeId, propertyTypeMap, recursive, isTest),
+                    ConvertPageType(blockLinkId, fromBlockTypeId, toBlockTypeId, recursive, isTest)
                 }
             });
         }
 
         private DataTable ConvertPageTypeProperties(
-          int pageLinkId,
-          int fromPageTypeId,
+          int blockLinkId,
+          int fromBlockTypeId,
           List<KeyValuePair<int, int>> propertyTypeMap,
           bool recursive,
           bool isTest)
@@ -79,7 +79,7 @@ namespace Alloy.Business.ConvertBlocks
             dataTable.Columns.Add("ToPropertyID");
             dataTable.Columns.Add("Count");
 
-            var content = (ILocalizable)_contentRepository.Get<IContent>(new ContentReference(pageLinkId));
+            var content = (ILocalizable)_contentRepository.Get<IContent>(new ContentReference(blockLinkId));
             var languageBranch = content.MasterLanguage;
             int id = _languageBranchRepository.Load(languageBranch).ID;
 
@@ -87,8 +87,8 @@ namespace Alloy.Business.ConvertBlocks
             {
                 DbCommand command = CreateCommand("netConvertPropertyForPageType");
                 command.Parameters.Add(CreateReturnParameter());
-                command.Parameters.Add(CreateParameter("PageID", pageLinkId));
-                command.Parameters.Add(CreateParameter("FromPageType", fromPageTypeId));
+                command.Parameters.Add(CreateParameter("PageID", blockLinkId));
+                command.Parameters.Add(CreateParameter("FromPageType", fromBlockTypeId));
                 command.Parameters.Add(CreateParameter("FromPropertyID", propertyType.Key));
                 command.Parameters.Add(CreateParameter("ToPropertyID", propertyType.Value));
                 command.Parameters.Add(CreateParameter("Recursive", recursive));
@@ -110,9 +110,9 @@ namespace Alloy.Business.ConvertBlocks
         }
 
         private DataTable ConvertPageType(
-          int pageLinkId,
-          int fromPageTypeId,
-          int toPageTypeId,
+          int blockLinkId,
+          int fromBlockTypeId,
+          int toBlockTypeId,
           bool recursive,
           bool isTest)
         {
@@ -121,9 +121,9 @@ namespace Alloy.Business.ConvertBlocks
             dataTable.Columns.Add("Count");
             DbCommand command = CreateCommand("netConvertPageType");
             command.Parameters.Add(CreateReturnParameter());
-            command.Parameters.Add(CreateParameter("PageID", pageLinkId));
-            command.Parameters.Add(CreateParameter("FromPageType", fromPageTypeId));
-            command.Parameters.Add(CreateParameter("ToPageType", toPageTypeId));
+            command.Parameters.Add(CreateParameter("PageID", blockLinkId));
+            command.Parameters.Add(CreateParameter("FromPageType", fromBlockTypeId));
+            command.Parameters.Add(CreateParameter("ToPageType", toBlockTypeId));
             command.Parameters.Add(CreateParameter("Recursive", recursive));
             command.Parameters.Add(CreateParameter("IsTest", isTest));
             command.ExecuteNonQuery();

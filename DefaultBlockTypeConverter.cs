@@ -21,7 +21,7 @@ namespace Alloy.Business.ConvertBlocks
         private readonly IPropertyDefinitionRepository _propertyDefinitionRepository;
         private readonly IContentTypeRepository _contentTypeRepository;
 
-        public event EventHandler<ConvertedBlockEventArgs> PagesConverted;
+        public event EventHandler<ConvertedBlockEventArgs> BlocksConverted;
 
         public DefaultBlockTypeConverter(
           ServiceAccessor<ConvertBlockTypeDb> dbAccessor,
@@ -63,7 +63,7 @@ namespace Alloy.Business.ConvertBlocks
             if (!isTest)
             {
                 stringBuilder.Append(RefreshPages(contentLink, recursive));
-                PagesConverted?.Invoke(this, new ConvertedBlockEventArgs(contentLink, fromBlockType, toBlockType, recursive));
+                BlocksConverted?.Invoke(this, new ConvertedBlockEventArgs(contentLink, fromBlockType, toBlockType, recursive));
             }
             return stringBuilder.ToString();
         }
