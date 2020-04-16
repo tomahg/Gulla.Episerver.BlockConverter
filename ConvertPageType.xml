@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<languages>
+  <language name="English" id="en">
+    <admin>
+      <convertpagetype>
+        <cancel>Cancel</cancel>
+        <confirmconvertcheckbox>I want to permanently remove these properties.</confirmconvertcheckbox>
+        <convert>Convert</convert>
+        <converterror>Could not convert the page:</converterror>
+        <converterrorsameproperty>
+          A new property is mapped to more than one old property. New properties can
+          only be mapped to one old property.
+        </converterrorsameproperty>
+        <frompageproperties>Convert from Property</frompageproperties>
+        <frompagetype>Convert from Page Type</frompagetype>
+        <haseffectonmirroring>Conversion of page types has an unpredictable effect on mirroring job ({0}). Mirroing for the mirroring job ({0}) may fail.</haseffectonmirroring>
+        <heading>Convert Pages</heading>
+        <info>
+          Converts one or several pages in the tree structure from one page type to another page type.&lt;br/&gt;
+          &lt;b&gt;Note!&lt;/b&gt; This operation is irreversible and content may be permanently removed.
+        </info>
+        <istesting>Test Results</istesting>
+        <languageid>Page language</languageid>
+        <log>
+          <clearcache>The cache is cleared for page {0}.</clearcache>
+          <clearcacheall>The cache is cleared for all pages.</clearcacheall>
+          <cntpages>{0} page(s) were converted.</cntpages>
+          <cntpagestest>{0} page(s) would be converted.</cntpagestest>
+          <commit>The transaction succeeded.</commit>
+          <convertedpagetype>{0} page(s) of page type {1} were converted to page type {2}.</convertedpagetype>
+          <convertedpagetypetest>{0} page(s) of page type {1} would be converted to page type {2}.</convertedpagetypetest>
+          <heading>The following were affected for page {0} (including versions).</heading>
+          <headingrecursive>The following were affected for page {0} (including versions and subpages of selected page type).</headingrecursive>
+          <headingrecursivetest>The following would be affected for page {0} (including versions and subpages of selected page type).</headingrecursivetest>
+          <headingtest>The following would be affected for page {0} (including versions).</headingtest>
+          <noproperty>No properties of type {0} were found.</noproperty>
+          <removeproperty>{0} property(ies) of type {1} were permanently removed.</removeproperty>
+          <removepropertytest>{0} property(ies) of type {1} would be permanently removed.</removepropertytest>
+          <updateproperty>{0} property(ies) of type {1} were converted to type {2}.</updateproperty>
+          <updatepropertytest>{0} property(ies) of type {1} would be converted to type {2}.</updatepropertytest>
+        </log>
+        <nomatchingpages>There are no subpages for the selected page type. The selected root page has page type {0}.</nomatchingpages>
+        <noselectedpage>Select a page to convert from</noselectedpage>
+        <notaccepted>User cancelled operation</notaccepted>
+        <notmatchingpagetype>The chosen page type does not match the selected page. The selected page has page type {0}.</notmatchingpagetype>
+        <ok>OK</ok>
+        <recursive>Convert the selected page and all subpages (of the selected page type)</recursive>
+        <remotepage>Conversion for pages is only supported for pages served by local Episerver CMS database.</remotepage>
+        <removelanguage>Remove language</removelanguage>
+        <removepropertywarning1>Make sure that none of the pages to be converted are currently being edited.</removepropertywarning1>
+        <removepropertywarning2>All values for the properties that you select to remove permanently will be permanently removed from the database and cannot be recovered.</removepropertywarning2>
+        <removepropertywarningheading>This operation may damage the content on the website!</removepropertywarningheading>
+        <removepropety>Remove property permanently</removepropety>
+        <requierdremovecomfirmation>Remove properties permanently must be selected to to continue</requierdremovecomfirmation>
+        <runtest>Test Conversion and Show Log</runtest>
+        <selectpageroot>Select pages to convert</selectpageroot>
+        <topageproperties>Convert to Property</topageproperties>
+        <topagetype>Convert to Page Type</topagetype>
+      </convertpagetype>
+    </admin>
+  </language>
+</languages>
