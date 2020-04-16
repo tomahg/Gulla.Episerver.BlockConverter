@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.MirroringService;
+using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.WebForms;
 using EPiServer.UI.WebControls;
@@ -15,10 +16,14 @@ using EPiServer.Web;
 
 namespace Alloy.Business.ConvertBlocks
 {
+    [GuiPlugIn(
+        DisplayName = "Convert Blocks",
+        Area = PlugInArea.AdminMenu,
+        SortIndex = 1,
+        Url = "~/Business/ConvertBlocks/ConvertBlockType.aspx")]
     public class ConvertBlockType : WebFormsBase
     {
-        private const string TEST_BUTTON_ID = "TestButton";
-        private const string VS_SELECTED_PAGELINK = "SelectedPageLink";
+        private const string TestButtonId = "TestButton";
         protected TextBox PageRoot;
         protected CheckBox Recursive;
         protected ConvertBlockTypeProperties Properties;
@@ -26,6 +31,12 @@ namespace Alloy.Business.ConvertBlocks
         protected ToolButton TestButton;
 
         internal Injected<IPermanentLinkMapper> PermanentLinkMapper { get; set; }
+
+        protected override void OnPreInit(EventArgs e)
+        {
+            base.OnPreInit(e);
+            SystemMessageContainer.Heading = "Convert Blocks";
+        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -53,7 +64,7 @@ namespace Alloy.Business.ConvertBlocks
 
         protected void Convert(object sender, EventArgs e)
         {
-            bool isTest = ((Control)sender).ID.Equals("TestButton");
+            bool isTest = ((Control)sender).ID.Equals(TestButtonId);
             try
             {
                 IContent content = null;
