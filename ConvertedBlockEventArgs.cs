@@ -1,43 +1,38 @@
-// Decompiled with JetBrains decompiler
-// Type: EPiServer.Core.ConvertedPageEventArgs
-// Assembly: EPiServer, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7
-// MVID: DD7755C1-5804-4516-BC55-0FAD4D404A5A
-// Assembly location: EPiServer.dll
-
+﻿using System;
+using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using System;
 
-namespace EPiServer.Core
+namespace Alloy.Business.ConvertBlocks
 {
     /// <summary>
     /// Event argument used in <see cref="T:EPiServer.Core.PageTypeConverter" /></summary>
-    public class ConvertedPageEventArgs : EventArgs
+    public class ConvertedBlockEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates a new instance of <see cref="T:EPiServer.Core.ConvertedPageEventArgs" /></summary>
-        public ConvertedPageEventArgs(
-            PageReference pageLink,
-            PageType fromPageType,
-            PageType toPageType,
+        /// Creates a new instance of <see cref="T:TinyMCE.Business.ConvertBlocks.ConvertedPageEventArgs" /></summary>
+        public ConvertedBlockEventArgs(
+            ContentReference contentLink,
+            BlockType fromBlockType,
+            BlockType toBlockType,
             bool recursive)
         {
-            this.PageLink = pageLink;
-            this.FromPageType = fromPageType;
-            this.ToPageType = toPageType;
-            this.Recursive = recursive;
+            ContentLink = contentLink;
+            FromBlockType = fromBlockType;
+            ToBlockType = toBlockType;
+            Recursive = recursive;
         }
 
         /// <summary>The page which is converted</summary>
-        public PageReference PageLink { get; }
+        public ContentReference ContentLink { get; }
 
-        /// <summary>Specifies from which pagetype it is converted</summary>
-        public PageType FromPageType { get; }
+        /// <summary>Specifies from which block type it is converted</summary>
+        public BlockType FromBlockType { get; }
 
-        /// <summary>Specifies to which pagetype it is converted</summary>
-        public PageType ToPageType { get; }
+        /// <summary>Specifies to which block type it is converted</summary>
+        public BlockType ToBlockType { get; }
 
         /// <summary>
-        /// Specifies if the convert operation is recursive for descendents of same pagetype
+        /// Specifies if the convert operation is recursive for descendents of same block type
         /// </summary>
         public bool Recursive { get; }
     }

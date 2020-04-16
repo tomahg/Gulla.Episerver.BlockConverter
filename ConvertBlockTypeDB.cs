@@ -1,44 +1,39 @@
-// Decompiled with JetBrains decompiler
-// Type: EPiServer.DataAccess.Internal.ConvertPageTypeDB
-// Assembly: EPiServer, Version=11.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7
-// MVID: DD7755C1-5804-4516-BC55-0FAD4D404A5A
-// Assembly location: EPiServer.dll
-
-using EPiServer.Core;
-using EPiServer.Data;
-using EPiServer.DataAbstraction;
-using EPiServer.ServiceLocation;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
+using EPiServer;
+using EPiServer.Core;
+using EPiServer.Data;
+using EPiServer.DataAbstraction;
+using EPiServer.DataAccess;
+using EPiServer.ServiceLocation;
 
-namespace EPiServer.DataAccess.Internal
+namespace Alloy.Business.ConvertBlocks
 {
     /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice.</summary>
     /// <internal-api />
     /// <exclude />
     [ServiceConfiguration]
-    public class ConvertPageTypeDB : DataAccessBase
+    public class ConvertBlockTypeDb : DataAccessBase
     {
         private readonly IContentRepository _contentRepository;
         private readonly ILanguageBranchRepository _languageBranchRepository;
         private readonly IPropertyDefinitionRepository _propertyDefinitionRepository;
 
-        /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice. Initializes a new instance of the <see cref="T:EPiServer.DataAccess.Internal.ConvertPageTypeDB" /> class.
+        /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice. Initializes a new instance of the <see cref="T:TinyMCE.Business.ConvertBlocks.ConvertBlockTypeDB" /> class.
         /// </summary>
         /// <exclude />
-        public ConvertPageTypeDB(
+        public ConvertBlockTypeDb(
           IDatabaseExecutor databaseHandler,
           IContentRepository contentRepository,
           ILanguageBranchRepository languageBranchRepository,
           IPropertyDefinitionRepository propertyDefinitionRepository)
           : base(databaseHandler)
         {
-            this._contentRepository = contentRepository;
-            this._languageBranchRepository = languageBranchRepository;
-            this._propertyDefinitionRepository = propertyDefinitionRepository;
+            _contentRepository = contentRepository;
+            _languageBranchRepository = languageBranchRepository;
+            _propertyDefinitionRepository = propertyDefinitionRepository;
         }
 
         /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice. Convert a page to a new page type
@@ -61,14 +56,14 @@ namespace EPiServer.DataAccess.Internal
           bool recursive,
           bool isTest)
         {
-            return this.Executor.ExecuteTransaction<DataSet>((Func<DataSet>)(() => new DataSet()
+            return Executor.ExecuteTransaction(() => new DataSet()
             {
                 Locale = CultureInfo.InvariantCulture,
                 Tables = {
-          this.ConvertPageTypeProperties(pageLinkId, fromPageTypeId, propertyTypeMap, recursive, isTest),
-          this.ConvertPageType(pageLinkId, fromPageTypeId, toPageTypeId, recursive, isTest)
-        }
-            }));
+                    ConvertPageTypeProperties(pageLinkId, fromPageTypeId, propertyTypeMap, recursive, isTest),
+                    ConvertPageType(pageLinkId, fromPageTypeId, toPageTypeId, recursive, isTest)
+                }
+            });
         }
 
         private DataTable ConvertPageTypeProperties(
@@ -83,25 +78,29 @@ namespace EPiServer.DataAccess.Internal
             dataTable.Columns.Add("FromPropertyID");
             dataTable.Columns.Add("ToPropertyID");
             dataTable.Columns.Add("Count");
-            int id = this._languageBranchRepository.Load(this._contentRepository.Get<PageData>(new ContentReference(pageLinkId)).MasterLanguage).ID;
+
+            var content = (ILocalizable)_contentRepository.Get<IContent>(new ContentReference(pageLinkId));
+            var languageBranch = content.MasterLanguage;
+            int id = _languageBranchRepository.Load(languageBranch).ID;
+
             foreach (KeyValuePair<int, int> propertyType in propertyTypeMap)
             {
-                DbCommand command = this.CreateCommand("netConvertPropertyForPageType");
-                command.Parameters.Add((object)this.CreateReturnParameter());
-                command.Parameters.Add((object)this.CreateParameter("PageID", (object)pageLinkId));
-                command.Parameters.Add((object)this.CreateParameter("FromPageType", (object)fromPageTypeId));
-                command.Parameters.Add((object)this.CreateParameter("FromPropertyID", (object)propertyType.Key));
-                command.Parameters.Add((object)this.CreateParameter("ToPropertyID", (object)propertyType.Value));
-                command.Parameters.Add((object)this.CreateParameter("Recursive", (object)recursive));
-                command.Parameters.Add((object)this.CreateParameter("MasterLanguageID", (object)id));
-                command.Parameters.Add((object)this.CreateParameter("IsTest", (object)isTest));
+                DbCommand command = CreateCommand("netConvertPropertyForPageType");
+                command.Parameters.Add(CreateReturnParameter());
+                command.Parameters.Add(CreateParameter("PageID", pageLinkId));
+                command.Parameters.Add(CreateParameter("FromPageType", fromPageTypeId));
+                command.Parameters.Add(CreateParameter("FromPropertyID", propertyType.Key));
+                command.Parameters.Add(CreateParameter("ToPropertyID", propertyType.Value));
+                command.Parameters.Add(CreateParameter("Recursive", recursive));
+                command.Parameters.Add(CreateParameter("MasterLanguageID", id));
+                command.Parameters.Add(CreateParameter("IsTest", isTest));
                 command.ExecuteNonQuery();
                 DataRow row = dataTable.NewRow();
-                row[0] = (object)propertyType.Key;
-                row[1] = (object)propertyType.Value;
-                row[2] = (object)this.GetReturnValue(command);
+                row[0] = propertyType.Key;
+                row[1] = propertyType.Value;
+                row[2] = GetReturnValue(command);
                 dataTable.Rows.Add(row);
-                if (this._propertyDefinitionRepository.Load(propertyType.Key).Type.DataType == PropertyDataType.Category)
+                if (_propertyDefinitionRepository.Load(propertyType.Key).Type.DataType == PropertyDataType.Category)
                 {
                     command.CommandText = "netConvertCategoryPropertyForPageType";
                     command.ExecuteNonQuery();
@@ -120,16 +119,16 @@ namespace EPiServer.DataAccess.Internal
             DataTable dataTable = new DataTable("Pages");
             dataTable.Locale = CultureInfo.InvariantCulture;
             dataTable.Columns.Add("Count");
-            DbCommand command = this.CreateCommand("netConvertPageType");
-            command.Parameters.Add((object)this.CreateReturnParameter());
-            command.Parameters.Add((object)this.CreateParameter("PageID", (object)pageLinkId));
-            command.Parameters.Add((object)this.CreateParameter("FromPageType", (object)fromPageTypeId));
-            command.Parameters.Add((object)this.CreateParameter("ToPageType", (object)toPageTypeId));
-            command.Parameters.Add((object)this.CreateParameter("Recursive", (object)recursive));
-            command.Parameters.Add((object)this.CreateParameter("IsTest", (object)isTest));
+            DbCommand command = CreateCommand("netConvertPageType");
+            command.Parameters.Add(CreateReturnParameter());
+            command.Parameters.Add(CreateParameter("PageID", pageLinkId));
+            command.Parameters.Add(CreateParameter("FromPageType", fromPageTypeId));
+            command.Parameters.Add(CreateParameter("ToPageType", toPageTypeId));
+            command.Parameters.Add(CreateParameter("Recursive", recursive));
+            command.Parameters.Add(CreateParameter("IsTest", isTest));
             command.ExecuteNonQuery();
             DataRow row = dataTable.NewRow();
-            row["Count"] = (object)this.GetReturnValue(command);
+            row["Count"] = GetReturnValue(command);
             dataTable.Rows.Add(row);
             return dataTable;
         }
