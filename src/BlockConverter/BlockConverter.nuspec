@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.ConvertBlocks</id>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <title>Gulla.Episerver.ConvertBlocks</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
@@ -12,14 +12,18 @@
     <copyright>Copyright 2020</copyright>	
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.BlockConverter" branch="master" />
     <releaseNotes>Initial release.</releaseNotes>
-	<tags>episerver,blocks,blocktype,convert</tags>
-	<description>Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.</description>
-	<dependencies>
-	    <dependency id="EPiServer.CMS.Core" version="[11.1.0, 12.0.0)" />
-	    <dependency id="EPiServer.CMS.UI" version="[11.1.0, 12.0.0)" />
-	</dependencies>
+	  <tags>episerver,blocks,blocktype,convert</tags>
+	  <description>Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.</description>
+	  <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.1.0, 12.0.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.1.0, 12.0.0)" />
+    </dependencies>
+    <references>
+      <reference file="BlockConverter.dll" />
+    </references>
   </metadata>	
   <files>
 	  <file src="ConvertBlockType.aspx" target="content\modules\Gulla.Episerver.ConvertBlocks\ConvertBlockType.aspx" />
-  </files>  	  
+    <file src="bin/Debug/BlockConverter.dll" target="ref/net471/BlockConverter.dll" />
+  </files>
 </package>
