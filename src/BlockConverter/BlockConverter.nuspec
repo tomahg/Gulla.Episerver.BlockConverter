@@ -10,7 +10,7 @@
     <license type="expression">Apache-2.0</license>
     <summary>Convert blocks to a different block type!</summary>
     <copyright>Copyright 2020</copyright>	
-    <repository type="git" url="https://github.com/tomahg/Gulla.EpiserverCensorFaces" branch="master" />
+    <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.BlockConverter" branch="master" />
     <releaseNotes>Initial release.</releaseNotes>
 	<tags>episerver,blocks,blocktype,convert</tags>
 	<description>Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.</description>
@@ -21,6 +21,5 @@
   </metadata>	
   <files>
 	  <file src="ConvertBlockType.aspx" target="content\modules\Gulla.Episerver.ConvertBlocks\ConvertBlockType.aspx" />
-	  <file src="bin\Release\BlockConverter.dll" target="lib\net471\BlockConverter.dll" />
   </files>  	  
 </package>
