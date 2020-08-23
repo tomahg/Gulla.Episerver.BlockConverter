@@ -167,16 +167,19 @@
     <Compile Include="ConvertBlockTypeProperties.cs" />
     <Compile Include="ConvertedBlockEventArgs.cs" />
     <Compile Include="DefaultBlockTypeConverter.cs" />
+    <Compile Include="Initialization\LocalizationInitialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BlockConverter.nuspec" />
     <None Include="ConvertBlockType.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </None>
-    <None Include="ConvertBlockType.xml" />
+    <EmbeddedResource Include="ConvertBlockType.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

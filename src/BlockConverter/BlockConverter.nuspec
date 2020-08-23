@@ -21,7 +21,6 @@
   </metadata>	
   <files>
 	  <file src="ConvertBlockType.aspx" target="content\modules\Gulla.Episerver.ConvertBlocks\ConvertBlockType.aspx" />
-	  <file src="ConvertBlockType.xml" target="content\modules\Gulla.Episerver.ConvertBlocks\ConvertBlockType.xml" />
 	  <file src="bin\Release\BlockConverter.dll" target="lib\net471\BlockConverter.dll" />
   </files>  	  
 </package>
