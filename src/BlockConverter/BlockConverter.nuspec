@@ -8,7 +8,7 @@
     <owners>Tomas Hensrud Gulla</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
-    <summary>Convert blocks to a different block type!</summary>
+    <summary>Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.</summary>
     <copyright>Copyright 2020</copyright>	
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.BlockConverter" branch="master" />
     <releaseNotes>Initial release.</releaseNotes>
