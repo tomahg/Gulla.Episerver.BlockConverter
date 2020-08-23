@@ -2,7 +2,7 @@
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 
-namespace Alloy.Business.ConvertBlocks
+namespace Gulla.Episerver.BlockConverter
 {
     /// <summary>
     /// Event argument used in <see cref="T:EPiServer.Core.PageTypeConverter" /></summary>

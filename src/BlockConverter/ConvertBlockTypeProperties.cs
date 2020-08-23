@@ -9,7 +9,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
 using EPiServer.ServiceLocation;
 
-namespace Alloy.Business.ConvertBlocks
+namespace Gulla.Episerver.BlockConverter
 {
     public class ConvertBlockTypeProperties : Control, INamingContainer
     {

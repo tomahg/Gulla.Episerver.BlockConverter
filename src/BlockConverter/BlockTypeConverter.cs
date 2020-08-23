@@ -4,7 +4,7 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
-namespace Alloy.Business.ConvertBlocks
+namespace Gulla.Episerver.BlockConverter
 {
     /// <summary>Converts page type for pages</summary>
     public static class BlockTypeConverter

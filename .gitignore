@@ -1,6 +1,9 @@
 [Bb]in/
 [Oo]bj/
+packages
 .vs/
 
 *.nupkg
 *.zip
+*.user
+

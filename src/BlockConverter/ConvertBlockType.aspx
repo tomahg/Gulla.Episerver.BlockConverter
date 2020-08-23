@@ -1,6 +1,6 @@
-<%@ Page Language="c#" Codebehind="ConvertBlockType.aspx.cs" AutoEventWireup="False" Inherits="Alloy.Business.ConvertBlocks.ConvertBlockType"  Title="ConvertBlockType" %>
-<%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI, Version=11.21.3.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7" %>
-<%@ Register TagPrefix="Custom" Namespace="Alloy.Business.ConvertBlocks" Assembly="TinyMCE" %>
+<%@ Page Language="c#" Codebehind="ConvertBlockType.aspx.cs" AutoEventWireup="False" Inherits="Gulla.Episerver.BlockConverter.ConvertBlockType"  Title="ConvertBlockType" %>
+<%@ Register TagPrefix="Gulla" Namespace="Gulla.Episerver.BlockConverter" Assembly="BlockConverter" %>
+<%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 
 <asp:Content ContentPlaceHolderID="HeaderContentRegion" runat="server">
 <script type="text/javascript">
@@ -27,7 +27,7 @@
        </div>
    </div>
 </div><br />
-    <Custom:ConvertBlockTypeProperties ID="Properties" Runat="server" />
+    <Gulla:ConvertBlockTypeProperties ID="Properties" Runat="server" />
     <div class="epi-buttonContainer">
         <EPiServerUI:ToolButton runat="server" id="ConvertButton" OnClientClick="return ShowDialog();" OnClick="Convert" ToolTip="<%$ Resources: EPiServer, admin.convertpagetype.convert %>" Text="<%$ Resources: EPiServer, admin.convertpagetype.convert %>"/><EPiServerUI:ToolButton runat="server" id="TestButton" OnClick="Convert" ToolTip="<%$ Resources: EPiServer, admin.convertpagetype.runtest %>" Text="<%$ Resources: EPiServer, admin.convertpagetype.runtest %>"/>		
     </div>

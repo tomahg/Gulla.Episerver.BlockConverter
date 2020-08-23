@@ -14,13 +14,13 @@ using EPiServer.Shell.WebForms;
 using EPiServer.UI.WebControls;
 using EPiServer.Web;
 
-namespace Alloy.Business.ConvertBlocks
+namespace Gulla.Episerver.BlockConverter
 {
     [GuiPlugIn(
         DisplayName = "Convert Blocks",
+        Url = "/modules/Gulla.Episerver.ConvertBlocks/ConvertBlockType.aspx",
         Area = PlugInArea.AdminMenu,
-        SortIndex = 1,
-        Url = "~/Business/ConvertBlocks/ConvertBlockType.aspx")]
+        SortIndex = 1)]
     public class ConvertBlockType : WebFormsBase
     {
         private const string TestButtonId = "TestButton";

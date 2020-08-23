@@ -9,7 +9,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.DataAccess;
 using EPiServer.ServiceLocation;
 
-namespace Alloy.Business.ConvertBlocks
+namespace Gulla.Episerver.BlockConverter
 {
     /// <summary>Unsupported INTERNAL API! Not covered by semantic versioning; might change without notice.</summary>
     /// <internal-api />
