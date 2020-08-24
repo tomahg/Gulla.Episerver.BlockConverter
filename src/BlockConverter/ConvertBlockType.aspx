@@ -16,6 +16,9 @@
 
 <asp:Content ContentPlaceHolderID="MainRegion" runat="server">
     <div class="epi-formArea">
+        <div style="border: solid 1px; padding: 0.2em; margin-bottom: 1em;">
+            <strong>Experimental module - use at your own risk!</strong>
+        </div>
         <div class="epi-size15">
             <div>
                 <asp:Label runat="server" AssociatedControlID="PageRoot" Text="Select single block to convert (id)" />
