@@ -1,4 +1,4 @@
-<%@ Page Language="c#" CodeBehind="ConvertBlockType.aspx.cs" AutoEventWireup="False" Inherits="Gulla.Episerver.BlockConverter.ConvertBlockType" Title="ConvertBlockType" %>
+<%@ Page Language="c#" EnableViewState="true" CodeBehind="ConvertBlockType.aspx.cs" AutoEventWireup="False" Inherits="Gulla.Episerver.BlockConverter.ConvertBlockType" Title="ConvertBlockType" %>
 
 <%@ Register TagPrefix="Gulla" Namespace="Gulla.Episerver.BlockConverter" Assembly="BlockConverter" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>

@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>Gulla.Episerver.ConvertBlocks</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <title>Gulla.Episerver.ConvertBlocks</title>
     <authors>Tomas Hensrud Gulla</authors>
     <owners>Tomas Hensrud Gulla</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
     <summary>Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.</summary>
-    <copyright>Copyright 2020</copyright>
+    <copyright>Copyright 2021</copyright>
     <projectUrl>https://github.com/tomahg/Gulla.Episerver.BlockConverter</projectUrl>
     <repository type="git" url="https://github.com/tomahg/Gulla.Episerver.BlockConverter" branch="master" />
     <releaseNotes>Minor adjustments.</releaseNotes>
