@@ -6,7 +6,7 @@ using EPiServer.PlugIn;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Gulla.Episerver.BlockConverter")]
-[assembly: AssemblyDescription("Convert blocks from one block type to another.")]
+[assembly: AssemblyDescription("Convert blocks from one block type to another")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tomas Hensrud Gulla")]
 [assembly: AssemblyProduct("Gulla.Episerver.BlockConverter")]
