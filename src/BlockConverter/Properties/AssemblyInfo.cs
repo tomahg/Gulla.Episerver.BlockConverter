@@ -1,17 +1,19 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using EPiServer.PlugIn;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Gulla.Episerver.BlockConverter")]
-[assembly: AssemblyDescription("Adds an admin tool that let you convert Episerver blocks from one block type to another, just like you can do with pages.")]
+[assembly: AssemblyDescription("Convert blocks from one block type to another.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tomas Hensrud Gulla")]
 [assembly: AssemblyProduct("Gulla.Episerver.BlockConverter")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: PlugInSummary("https://www.gulla.net/en/blog/convert-episerver-blocks/", LicensingMode.CustomLicense)]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -31,5 +33,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.8.0")]
+[assembly: AssemblyFileVersion("1.0.8.0")]
