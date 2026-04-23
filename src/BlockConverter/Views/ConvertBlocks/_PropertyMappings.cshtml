@@ -1,0 +1,35 @@
+@model PropertyMappingsViewModel
+@if (!Model.Rows.Any())
+{
+    <p style="color:#666;font-style:italic;margin:1rem 0">No properties on the selected block type.</p>
+}
+else
+{
+    <table class="cb-prop-table">
+        <thead>
+            <tr>
+                <th>Convert from Property</th>
+                <th>Convert to Property</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                <tr>
+                    <td>@row.FromPropertyName</td>
+                    <td>
+                        <select name="prop_@row.FromPropertyId" data-from-id="@row.FromPropertyId" class="cb-select cb-prop-select">
+                            @foreach (var opt in row.Options)
+                            {
+                                <option value="@opt.Id" selected="@(opt.Id == row.SelectedToPropertyId)">@opt.Name</option>
+                            }
+                            <option value="0" selected="@(row.SelectedToPropertyId == 0)">Remove property permanently</option>
+                        </select>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<input type="hidden" id="hiddenFromTypeId" value="@Model.FromBlockTypeId" />
+<input type="hidden" id="hiddenToTypeId" value="@Model.ToBlockTypeId" />

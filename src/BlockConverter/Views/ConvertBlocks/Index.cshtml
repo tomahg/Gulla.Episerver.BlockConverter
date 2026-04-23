@@ -1,0 +1,342 @@
+@model ConvertBlocksViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convert Blocks</title>
+    <style>
+        .cb-wrap {
+            padding: 2rem 2.5rem;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+        }
+
+        h1 { font-size: 28px; font-weight: 300; margin: 0 0 1.25rem; color: #333; }
+
+        .cb-desc { margin-bottom: 1.75rem; line-height: 1.5; }
+
+        .cb-mode-row { display: flex; gap: 2rem; margin-bottom: 1.75rem; }
+        .cb-mode-row label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+
+        .cb-section { margin-bottom: 1.75rem; }
+        .cb-section-label { font-size: 13px; color: #555; margin-bottom: 0.5rem; }
+        .cb-picker-row { display: flex; align-items: center; gap: 0.75rem; }
+        .cb-picker-display {
+            border: 1px solid #ccc;
+            padding: 0.4rem 0.75rem;
+            min-width: 260px;
+            border-radius: 2px;
+            color: #555;
+            font-size: 13px;
+            background: #fafafa;
+        }
+
+        .cb-types-row { display: flex; gap: 2.5rem; margin-bottom: 1.75rem; }
+        .cb-type-col { flex: 1; max-width: 340px; }
+        .cb-type-col label { display: block; font-size: 13px; color: #555; margin-bottom: 0.4rem; }
+
+        .cb-select {
+            width: 100%;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 13px;
+            background: #fff;
+            color: #333;
+        }
+        .cb-select:disabled { background: #f5f5f5; color: #999; }
+
+        button.cb-btn {
+            padding: 0.45rem 1.1rem;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #fff;
+            color: #333;
+        }
+        button.cb-btn:hover { background: #f0f0f0; }
+        button.cb-btn-primary { background: #0066cc; border-color: #0066cc; color: #fff; }
+        button.cb-btn-primary:hover { background: #0055aa; border-color: #0055aa; }
+        button.cb-btn:disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+
+        .cb-prop-table { width: 100%; border-collapse: collapse; margin-bottom: 1.75rem; }
+        .cb-prop-table th {
+            text-align: left;
+            padding: 0.4rem 0.75rem;
+            font-size: 12px;
+            color: #777;
+            font-weight: 600;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .cb-prop-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .cb-prop-table td:first-child { width: 45%; }
+
+        .cb-actions { display: flex; gap: 0.75rem; margin-bottom: 1.75rem; align-items: center; }
+        .cb-loading { display: none; font-size: 13px; color: #666; }
+        .cb-loading.visible { display: inline; }
+
+        #conversionLog {
+            display: none;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 1rem 1.25rem;
+            font-size: 13px;
+            white-space: pre-wrap;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #conversionLog.visible { display: block; }
+        #propMappingsSection { margin-bottom: 1.5rem; }
+        .cb-hint { color: #999; font-size: 13px; font-style: italic; }
+    </style>
+</head>
+<body>
+    @Html.AntiForgeryToken()
+    @Html.Raw(Html.CreatePlatformNavigationMenu())
+    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+        <div class="epi-contentArea cb-wrap">
+
+            <h1>Convert Blocks</h1>
+
+            <p class="cb-desc">
+                Converts one or more blocks from one block type to another.<br />
+                <strong style="font-weight: bolder">Note!</strong> This operation is irreversible, and content may be permanently corrupted or lost.
+            </p>
+
+            <!-- Mode selection -->
+            <div class="cb-mode-row">
+                <label>
+                    <input type="radio" name="conversionMode" value="single" id="modeSingle" checked />
+                    Convert a single block
+                </label>
+                <label>
+                    <input type="radio" name="conversionMode" value="type" id="modeType" />
+                    Convert all blocks of type
+                </label>
+            </div>
+
+            <!-- Single block picker (visible in single mode) -->
+            <div class="cb-section" id="singleBlockSection">
+                <div class="cb-section-label">Select block to convert</div>
+                <div class="cb-picker-row">
+                    <span class="cb-picker-display" id="selectedBlockDisplay">No block selected</span>
+                    <button type="button" class="cb-btn" id="selectBlockBtn">Select Block...</button>
+                </div>
+            </div>
+
+            <!-- Block type selectors -->
+            <div class="cb-types-row">
+                <div class="cb-type-col">
+                    <label for="fromBlockType">Convert from Block Type</label>
+                    <select id="fromBlockType" class="cb-select" disabled>
+                        @foreach (var bt in Model.BlockTypes)
+                        {
+                            <option value="@bt.ID">@bt.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="cb-type-col">
+                    <label for="toBlockType">Convert to Block Type</label>
+                    <select id="toBlockType" class="cb-select">
+                        @foreach (var bt in Model.BlockTypes)
+                        {
+                            <option value="@bt.ID">@bt.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Property mappings (loaded via AJAX) -->
+            <div id="propMappingsSection">
+                <p class="cb-hint">Select block types above to configure property mappings.</p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="cb-actions">
+                <button type="button" class="cb-btn" id="testBtn">Test Conversion and Show Log</button>
+                <button type="button" class="cb-btn cb-btn-primary" id="convertBtn">Convert</button>
+                <span class="cb-loading" id="loadingMsg">Working…</span>
+            </div>
+
+            <!-- Log output -->
+            <pre id="conversionLog"></pre>
+
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        "use strict";
+
+        var selectedBlockId = null;
+
+        // ── Mode switching ──────────────────────────────────────────────
+        document.getElementById("modeSingle").addEventListener("change", applyMode);
+        document.getElementById("modeType").addEventListener("change", applyMode);
+
+        function applyMode() {
+            var isSingle = document.getElementById("modeSingle").checked;
+            document.getElementById("singleBlockSection").style.display = isSingle ? "" : "none";
+            document.getElementById("fromBlockType").disabled = isSingle;
+            clearPropertyMappings();
+            if (!isSingle) maybeLoadProperties();
+            else if (selectedBlockId) maybeLoadProperties();
+        }
+
+        // ── Content picker ──────────────────────────────────────────────
+        document.getElementById("selectBlockBtn").addEventListener("click", openContentPicker);
+
+        function openContentPicker() {
+            if (typeof require !== "undefined") {
+                require(["epi-cms/contentediting/ContentBrowserDialog"], function (Dialog) {
+                    var dialog = new Dialog({
+                        roots: [],
+                        typeIdentifiers: ["episerver.core.blockdata"]
+                    });
+                    dialog.on("select", function (item) {
+                        dialog.destroyRecursive();
+                        // item.id may be "123" or a full content-reference string — parseInt extracts the numeric id
+                        fetchBlockInfo(parseInt(item.id, 10));
+                    });
+                    dialog.startup();
+                    dialog.show();
+                }, fallbackPrompt);
+            } else {
+                fallbackPrompt();
+            }
+        }
+
+        function fallbackPrompt() {
+            var raw = window.prompt("Enter the block content ID:");
+            if (!raw) return;
+            var id = parseInt(raw, 10);
+            if (isNaN(id)) { showLog("Invalid content ID."); return; }
+            fetchBlockInfo(id);
+        }
+
+        function fetchBlockInfo(id) {
+            fetch("/convertblocks/blockinfo?id=" + id)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.error) { showLog("Error: " + data.error); return; }
+                    selectedBlockId = id;
+                    document.getElementById("selectedBlockDisplay").textContent = data.name + " [" + id + "]";
+                    document.getElementById("fromBlockType").value = data.typeId;
+                    clearPropertyMappings();
+                    maybeLoadProperties();
+                })
+                .catch(function (err) { showLog("Could not load block info: " + err); });
+        }
+
+        // ── Block type changes ──────────────────────────────────────────
+        document.getElementById("fromBlockType").addEventListener("change", function () {
+            clearPropertyMappings();
+            maybeLoadProperties();
+        });
+        document.getElementById("toBlockType").addEventListener("change", function () {
+            clearPropertyMappings();
+            maybeLoadProperties();
+        });
+
+        function maybeLoadProperties() {
+            var isSingle = document.getElementById("modeSingle").checked;
+            if (isSingle && !selectedBlockId) return;
+
+            var fromId = document.getElementById("fromBlockType").value;
+            var toId   = document.getElementById("toBlockType").value;
+            if (!fromId || !toId || fromId === toId) return;
+
+            fetch("/convertblocks/properties?fromTypeId=" + fromId + "&toTypeId=" + toId)
+                .then(function (r) {
+                    if (!r.ok) throw new Error("HTTP " + r.status);
+                    return r.text();
+                })
+                .then(function (html) {
+                    document.getElementById("propMappingsSection").innerHTML = html;
+                })
+                .catch(function (err) { showLog("Error loading properties: " + err); });
+        }
+
+        function clearPropertyMappings() {
+            document.getElementById("propMappingsSection").innerHTML =
+                '<p class="cb-hint">Select block types above to configure property mappings.</p>';
+        }
+
+        // ── Convert / Test ──────────────────────────────────────────────
+        document.getElementById("testBtn").addEventListener("click", function () { doConvert(true); });
+        document.getElementById("convertBtn").addEventListener("click", function () {
+            if (!confirm("This operation is irreversible and content may be permanently removed.\nContinue?"))
+                return;
+            doConvert(false);
+        });
+
+        function doConvert(isTest) {
+            var isSingle = document.getElementById("modeSingle").checked;
+            if (isSingle && !selectedBlockId) { showLog("Please select a block first."); return; }
+
+            var fromId = parseInt(document.getElementById("fromBlockType").value, 10);
+            var toId   = parseInt(document.getElementById("toBlockType").value, 10);
+            if (fromId === toId) { showLog("Source and target block types must be different."); return; }
+
+            var payload = {
+                conversionMode:   isSingle ? "single" : "type",
+                singleBlockId:    isSingle ? selectedBlockId : null,
+                fromBlockTypeId:  fromId,
+                toBlockTypeId:    toId,
+                isTest:           isTest,
+                propertyMappings: collectMappings()
+            };
+
+            setLoading(true);
+
+            fetch("/convertblocks/convert", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                setLoading(false);
+                showLog((isTest ? "--- TEST RUN ---\n\n" : "") + (data.log || "(no log output)"));
+            })
+            .catch(function (err) {
+                setLoading(false);
+                showLog("Request failed: " + err);
+            });
+        }
+
+        function collectMappings() {
+            return Array.from(document.querySelectorAll(".cb-prop-select")).map(function (sel) {
+                return {
+                    fromId: parseInt(sel.getAttribute("data-from-id"), 10),
+                    toId:   parseInt(sel.value, 10)
+                };
+            });
+        }
+
+        function showLog(text) {
+            var el = document.getElementById("conversionLog");
+            el.textContent = text;
+            el.classList.add("visible");
+        }
+
+        function setLoading(on) {
+            document.getElementById("testBtn").disabled    = on;
+            document.getElementById("convertBtn").disabled = on;
+            document.getElementById("loadingMsg").classList.toggle("visible", on);
+        }
+
+    }());
+    </script>
+
+</body>
+</html>
