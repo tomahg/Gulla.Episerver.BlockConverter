@@ -12,7 +12,7 @@ public class LocalizationInitialization : IInitializableModule
 {
     public void Initialize(InitializationEngine context)
     {
-        if (context.Locate.Advanced.GetRequiredService<LocalizationService>() is not ProviderBasedLocalizationService localizationService)
+        if (context.Services.GetRequiredService<LocalizationService>() is not ProviderBasedLocalizationService localizationService)
             return;
 
         var assembly = Assembly.GetAssembly(typeof(LocalizationInitialization))!;

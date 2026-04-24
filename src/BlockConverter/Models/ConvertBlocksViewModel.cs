@@ -4,7 +4,7 @@ namespace Gulla.Episerver.BlockConverter.Models;
 
 public class ConvertBlocksViewModel
 {
-    public List<BlockType> BlockTypes { get; set; } = new();
+    public List<ContentType> BlockTypes { get; set; } = new();
     public string ConversionMode { get; set; } = "single";
 
     // Single-block mode

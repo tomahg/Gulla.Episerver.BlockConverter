@@ -41,8 +41,8 @@ public class ConvertBlocksController : Controller
         try
         {
             var content = _contentRepository.Get<IContent>(new ContentReference(id));
-            var blockType = _contentTypeRepository.Load(content.ContentTypeID) as BlockType;
-            if (blockType == null)
+            var blockType = _contentTypeRepository.Load(content.ContentTypeID);
+            if (blockType == null || blockType.Base != ContentTypeBase.Block)
                 return BadRequest(new { error = "Selected content is not a block." });
 
             return Json(new { name = content.Name, typeId = blockType.ID, typeName = blockType.Name });
@@ -56,10 +56,11 @@ public class ConvertBlocksController : Controller
     [HttpGet("properties")]
     public IActionResult Properties(int fromTypeId, int toTypeId)
     {
-        var fromType = _contentTypeRepository.Load(fromTypeId) as BlockType;
-        var toType = _contentTypeRepository.Load(toTypeId) as BlockType;
+        var fromType = _contentTypeRepository.Load(fromTypeId);
+        var toType = _contentTypeRepository.Load(toTypeId);
 
-        if (fromType == null || toType == null)
+        if (fromType == null || fromType.Base != ContentTypeBase.Block ||
+            toType == null || toType.Base != ContentTypeBase.Block)
             return BadRequest();
 
         var model = BuildPropertyMappingsViewModel(fromType, toType);
@@ -73,7 +74,7 @@ public class ConvertBlocksController : Controller
         try
         {
             ContentReference startRef;
-            BlockType fromType;
+            ContentType fromType;
 
             if (request.ConversionMode == "single")
             {
@@ -81,21 +82,21 @@ public class ConvertBlocksController : Controller
                     return BadRequest(new { error = "No block selected." });
 
                 var content = _contentRepository.Get<IContent>(new ContentReference(request.SingleBlockId.Value));
-                fromType = (_contentTypeRepository.Load(content.ContentTypeID) as BlockType)!;
-                if (fromType == null)
+                fromType = _contentTypeRepository.Load(content.ContentTypeID)!;
+                if (fromType == null || fromType.Base != ContentTypeBase.Block)
                     return BadRequest(new { error = "Selected content is not a block." });
                 startRef = content.ContentLink;
             }
             else
             {
-                fromType = (_contentTypeRepository.Load(request.FromBlockTypeId) as BlockType)!;
-                if (fromType == null)
+                fromType = _contentTypeRepository.Load(request.FromBlockTypeId)!;
+                if (fromType == null || fromType.Base != ContentTypeBase.Block)
                     return BadRequest(new { error = "Invalid from block type." });
                 startRef = ContentReference.RootPage;
             }
 
-            var toType = _contentTypeRepository.Load(request.ToBlockTypeId) as BlockType;
-            if (toType == null)
+            var toType = _contentTypeRepository.Load(request.ToBlockTypeId);
+            if (toType == null || toType.Base != ContentTypeBase.Block)
                 return BadRequest(new { error = "Invalid to block type." });
 
             var mappings = request.PropertyMappings
@@ -117,10 +118,10 @@ public class ConvertBlocksController : Controller
         }
     }
 
-    private List<BlockType> GetBlockTypes()
-        => _contentTypeRepository.List().OfType<BlockType>().OrderBy(t => t.Name).ToList();
+    private List<ContentType> GetBlockTypes()
+        => _contentTypeRepository.List().Where(t => t.Base == ContentTypeBase.Block).OrderBy(t => t.Name).ToList();
 
-    private PropertyMappingsViewModel BuildPropertyMappingsViewModel(BlockType fromType, BlockType toType)
+    private PropertyMappingsViewModel BuildPropertyMappingsViewModel(ContentType fromType, ContentType toType)
     {
         var model = new PropertyMappingsViewModel
         {
@@ -141,10 +142,7 @@ public class ConvertBlocksController : Controller
                 if (toProp.Type.DataType != fromProp.Type.DataType)
                     continue;
 
-                // For block-typed properties, source and target block type GUIDs must match
-                if (fromProp.Type is BlockPropertyDefinitionType fromBlockPropType &&
-                    toProp.Type is BlockPropertyDefinitionType toBlockPropType &&
-                    fromBlockPropType.BlockType.GUID != toBlockPropType.BlockType.GUID)
+                if (fromProp.ItemTypeReference != toProp.ItemTypeReference)
                     continue;
 
                 row.Options.Add(new PropertyMappingOption { Id = toProp.ID, Name = toProp.Name });

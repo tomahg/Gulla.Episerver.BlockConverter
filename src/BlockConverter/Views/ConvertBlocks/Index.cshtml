@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Convert Blocks</title>
+    <required-client-resources area="@RenderingTags.Header" />
     <style>
         .cb-wrap {
             padding: 2rem 2.5rem;
@@ -101,8 +102,14 @@
 </head>
 <body>
     @Html.AntiForgeryToken()
-    @Html.Raw(Html.CreatePlatformNavigationMenu())
-    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+    @* The shell's React navigation bundle reads settings (including the antiforgery form
+       field name) from this element's data-epi-common-settings attribute. Without it, axios
+       skips setting the RequestVerificationToken header and background polls 400. *@
+    <div id="episerver-common-settings-container"
+         data-epi-common-settings='{"antiforgeryFormFieldName":"__RequestVerificationToken","antiforgeryHeaderName":"RequestVerificationToken","shellModuleUrl":"/episerver/Shell","cmsModuleUrl":"/episerver/CMS","modules":[]}'
+         hidden></div>
+    <platform-navigation/>
+    <platform-navigation-wrapper>
         <div class="epi-contentArea cb-wrap">
 
             <h1>Convert Blocks</h1>
@@ -171,7 +178,7 @@
             <pre id="conversionLog"></pre>
 
         </div>
-    </div>
+    </platform-navigation-wrapper>
 
     <script>
     (function () {
@@ -337,6 +344,6 @@
 
     }());
     </script>
-
+    <required-client-resources area="@RenderingTags.Footer" />
 </body>
 </html>

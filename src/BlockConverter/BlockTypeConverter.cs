@@ -8,8 +8,8 @@ public static class BlockTypeConverter
 {
     public static string Convert(
         ContentReference contentLink,
-        BlockType fromBlockType,
-        BlockType toBlockType,
+        ContentType fromBlockType,
+        ContentType toBlockType,
         List<KeyValuePair<int, int>> propertyTypeMap,
         bool recursive,
         bool isTest)

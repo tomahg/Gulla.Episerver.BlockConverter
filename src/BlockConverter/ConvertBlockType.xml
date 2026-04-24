@@ -17,8 +17,8 @@
         <heading>Convert Blocks</heading>
         <info>
           Converts one or several blocks in the tree structure from one block type to another block type.&lt;br/&gt;
-          &lt;b&gt;Note!&lt;/b&gt; This operation is irreversible and content may be permanently removed.
-        </info>
+          &lt;b&gt;Note!&lt;/b&gt; This operation is irreversible, and content may be permanently corrupted or lost.
+		</info>
         <istesting>Test Results</istesting>
         <languageid>Block language</languageid>
         <log>
@@ -30,9 +30,9 @@
           <convertedpagetype>{0} block(s) of block type {1} were converted to block type {2}.</convertedpagetype>
           <convertedpagetypetest>{0} block(s) of block type {1} would be converted to block type {2}.</convertedpagetypetest>
           <heading>The following were affected for block {0} (including versions).</heading>
-          <headingrecursive>The following were affected for block {0} (including versions of selected block type).</headingrecursive>
-          <headingrecursivetest>The following would be affected for block {0} (including versions and subpages of selected block type).</headingrecursivetest>
-          <headingtest>The following would be affected for block {0} (including versions).</headingtest>
+          <headingrecursive>The following were affected for all blocks of type {0}.</headingrecursive>
+          <headingrecursivetest>The following would be affected for all blocks of type {0}.</headingrecursivetest>
+          <headingtest>The following would be affected for block {0}, including versions.</headingtest>
           <noproperty>No properties of type {0} were found.</noproperty>
           <removeproperty>{0} property(ies) of type {1} were permanently removed.</removeproperty>
           <removepropertytest>{0} property(ies) of type {1} would be permanently removed.</removepropertytest>

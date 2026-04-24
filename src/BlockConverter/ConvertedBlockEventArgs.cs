@@ -7,8 +7,8 @@ public class ConvertedBlockEventArgs : EventArgs
 {
     public ConvertedBlockEventArgs(
         ContentReference contentLink,
-        BlockType fromBlockType,
-        BlockType toBlockType,
+        ContentType fromBlockType,
+        ContentType toBlockType,
         bool recursive)
     {
         ContentLink = contentLink;
@@ -18,7 +18,7 @@ public class ConvertedBlockEventArgs : EventArgs
     }
 
     public ContentReference ContentLink { get; }
-    public BlockType FromBlockType { get; }
-    public BlockType ToBlockType { get; }
+    public ContentType FromBlockType { get; }
+    public ContentType ToBlockType { get; }
     public bool Recursive { get; }
 }

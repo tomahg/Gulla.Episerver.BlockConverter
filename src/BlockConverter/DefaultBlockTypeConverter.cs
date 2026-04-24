@@ -39,8 +39,8 @@ public class DefaultBlockTypeConverter
 
     public string Convert(
         ContentReference contentLink,
-        BlockType fromBlockType,
-        BlockType toBlockType,
+        ContentType fromBlockType,
+        ContentType toBlockType,
         List<KeyValuePair<int, int>> propertyTypeMap,
         bool recursive,
         bool isTest)
@@ -68,16 +68,16 @@ public class DefaultBlockTypeConverter
         return sb.ToString();
     }
 
-    private string GeneratePageLog(int pageLinkId)
-        => $" '{_contentRepository.Get<IContent>(new ContentReference(pageLinkId)).Name}[{pageLinkId}]'  ";
+    private string GenerateBlockLog(int pageLinkId)
+        => $"'{_contentRepository.Get<IContent>(new ContentReference(pageLinkId)).Name}' ({pageLinkId})'";
 
     private string GeneratePropertyLog(int propertyId)
         => $"'{_propertyDefinitionRepository.Load(propertyId).Name}'";
 
     private string GenerateBlockTypeLog(int blockTypeId)
     {
-        var type = (_contentTypeRepository.Load(blockTypeId) as BlockType)!;
-        return $"'{type.Name}'({type.ID})'";
+        var type = _contentTypeRepository.Load(blockTypeId)!;
+        return $"'{type.Name}' ({type.ID})";
     }
 
     private StringBuilder GenerateConvertedPropertyLog(int fromPropertyId, int toPropertyId, int cntUpdated, bool isTest)
@@ -113,7 +113,7 @@ public class DefaultBlockTypeConverter
         return sb;
     }
 
-    private StringBuilder GenerateLogMessage(DataSet ds, int pageLinkId, int fromBlockTypeId, int toBlockTypeId, bool recursive, bool isTest)
+    private StringBuilder GenerateLogMessage(DataSet ds, int blockId, int fromBlockTypeId, int toBlockTypeId, bool recursive, bool isTest)
     {
         var ret = new StringBuilder();
 
@@ -127,7 +127,16 @@ public class DefaultBlockTypeConverter
 
         var headingFormat = _localizationService.GetString(headingKey);
         if (headingFormat != null)
-            ret.Append(string.Format(headingFormat, GeneratePageLog(pageLinkId)));
+        {
+            if (recursive)
+            {
+                ret.Append(string.Format(headingFormat, GenerateBlockTypeLog(fromBlockTypeId)));
+            }
+            else
+            {
+                ret.Append(string.Format(headingFormat, GenerateBlockLog(blockId)));
+            }
+        }
 
         ret.Append("\n\n");
 
