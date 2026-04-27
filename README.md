@@ -1,6 +1,6 @@
 # Gulla.Episerver.ConvertBlocks
 
-An Optimizely CMS 12 admin tool for converting blocks from one block type to another — the same functionality as the built-in "Convert Pages" tool, but for blocks.
+An Optimizely CMS 13 admin tool for converting blocks from one block type to another — the same functionality as the built-in "Convert Pages" tool, but for blocks.
 
 ## Features
 
@@ -20,5 +20,5 @@ Or install via the NuGet package manager. No `Startup.cs` changes required — t
 
 ## Requirements
 
-- Optimizely CMS 12
-- .NET 6
+- Optimizely CMS 13
+- .NET 10
